@@ -1,12 +1,28 @@
+import matplotlib as plt
+
 class Box:
     def __init__(self, cat=None):
         self.cat = cat
         self.nextCat = None
-
+        self.prevCat = None
 
 class LinkedCats:
     def __init__(self):
         self.head = None
+
+    # Переворачиваем котиков
+    def reverse(self):
+        temp = None
+        current = self.head
+
+        while current is not None:
+            temp = current.prevCat
+            current.prevCat = current.nextCat
+            current.nextCat = temp
+            current = current.prevCat
+
+        if temp is not None:
+            self.head = temp.prevCat
 
     # Проверка наличия котика в списке
     def contains(self, cat):
@@ -18,16 +34,14 @@ class LinkedCats:
                 lastBox = lastBox.nextCat
         return False
 
-    # Добавление котика в конец списка
-    def addToEnd(self, newCat):
+    # Добавление котика
+    def addCat(self, newCat):
         newBox = Box(newCat)
-        if self.head is None:
-            self.head = newBox
-            return
-        lastBox = self.head
-        while (lastBox.nextCat):
-            lastBox = lastBox.nextCat
-        lastBox.nextCat = newBox
+        newBox.nextCat = self.head
+        if self.head is not None:
+            self.head.prevCat = newBox
+        self.head = newBox
+
 
     # Достаем котика по индексу
     def get(self, catIndex):
@@ -39,36 +53,22 @@ class LinkedCats:
             boxIndex = boxIndex + 1
             lastBox = lastBox.nextCat
 
-    # Прогнать котика ((
-    def removeCat(self, remCat):
-        headCat = self.head
-
-        if headCat is not None:
-            if headCat.cat == remCat:
-                self.head = headCat.nextCat
-                headCat = None
-                return
-        while headCat is not None:
-            if headCat.cat == remCat:
-                break
-            lastCat = headCat
-            headCat = headCat.nextCat
-        if headCat == None:
-            return
-        lastCat.nextCat = headCat.nextCat
-        headCat = None
-
     def showCats(self, cat):
         while cat is not None:
-            print(cat.cat)
+            print(cat.cat, end=" ")
             cat = cat.nextCat
+        print()
 
 
 catBox = LinkedCats()
-catBox.addToEnd(2)
-catBox.addToEnd(3)
-catBox.addToEnd(4)
-catBox.addToEnd(5)
+for i in range(10):
+    catBox.addCat(i)
+# catBox.addCat(2)
+# catBox.addCat(3)
+# catBox.addCat(4)
+# catBox.addCat(5)
 
+catBox.showCats(catBox.head)
+catBox.reverse()
 catBox.showCats(catBox.head)
 #print(catBox)
