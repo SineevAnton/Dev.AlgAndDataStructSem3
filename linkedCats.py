@@ -1,5 +1,6 @@
 import math
-
+import time
+import matplotlib.pyplot as plt
 
 class Box:
     def __init__(self, cat=None):
@@ -60,27 +61,30 @@ class LinkedCats:
             cat = cat.nextCat
         print()
 
-import matplotlib.pyplot as plt
+timeCounts = []
+inputDataCounts = [10, 100, 1000, 10000, 100000]
 
-catBox = LinkedCats()
-for i in range(10):
-    catBox.addCat(i)
-# catBox.addCat(2)
-# catBox.addCat(3)
-# catBox.addCat(4)
-# catBox.addCat(5)
+for el in inputDataCounts:
+    catBox = LinkedCats()
+    for i in range(el):
+        catBox.addCat(i)
 
-data = [i for i in range(10)]
+    #catBox.showCats(catBox.head)
+    start = time.time()
+    catBox.reverse()
+    end = time.time()
+    #catBox.showCats(catBox.head)
+    timeCounts.append(end - start)
 
-catBox.showCats(catBox.head)
-catBox.reverse()
-catBox.showCats(catBox.head)
-#print(catBox)
+print(*timeCounts)
+for i in range(len(timeCounts)):
+    timeCounts[i] = (int)(timeCounts[i]*1000000)
+print(*timeCounts)
 
-# fig, simpleChart = plt.subplots()
-# simpleChart.plot(data)
-# plt.show()
+endPoint = max(timeCounts)
 
+inputValuesCount = [i for i in range((int)(endPoint/len(timeCounts)), endPoint+1, (int)(endPoint/len(timeCounts)))]
+print(inputValuesCount)
 # Классы оценок сложности:
 # O(1)
 # O(log(n))
@@ -89,7 +93,8 @@ catBox.showCats(catBox.head)
 # O(n^2)
 # O(n^3)
 # O(2^n)
-inputValuesCount = [i for i in range(10, 1000)]
+
+# inputValuesCount = [i for i in range(10, 1000)]
 logData = [math.log(i) for i in inputValuesCount]
 nData = inputValuesCount
 nLogNData = [i*math.log(i) for i in inputValuesCount]
@@ -98,15 +103,16 @@ cubeData = [i**3 for i in inputValuesCount]
 expData = [2**i for i in inputValuesCount]
 
 fig, ax = plt.subplots()
-ax.set_ylim([0, 1000])
+ax.set_xlim([2000, 15000])
 
 l1 = ax.plot(inputValuesCount, logData, label = "O(log(n))")
 l2 = ax.plot(inputValuesCount, nData, label = "O(n)")
 l3 = ax.plot(inputValuesCount, nLogNData, label = "O(n*log(n))")
 l4 = ax.plot(inputValuesCount, squareData, label = "O(n^2)")
 l5 = ax.plot(inputValuesCount, cubeData, label = "O(n^3)")
-l6 = ax.plot(inputValuesCount, expData, label = "O(2^n)")
-#plt.yscale('log')
+#l6 = ax.plot(inputValuesCount, expData, label = "O(2^n)")
+l7 = ax.plot(inputDataCounts, inputValuesCount, label = "User algorithm")
+plt.yscale('log')
 ax.legend(shadow=True, fancybox=True)
 plt.xlabel("common X")
 plt.ylabel("common Y")
